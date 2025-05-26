@@ -59,15 +59,12 @@ flash_status_t flash_init(flash_config_t* flash_config_ptr)
 
     if(!flash.initialized)
     {
-		uint8_t idx = 0;
-        uint32_t bytes_traversed = 0;
-
         flash.conf_ptr = flash_config_ptr;
 
         flash.initialized = true;
 
         // Compute total flash we have available in bytes
-        for(idx = 0; idx < flash.conf_ptr->ll.pages_total_num; ++idx)
+        for(uint8_t idx = 0; idx < flash.conf_ptr->ll.pages_total_num; ++idx)
         {
             assert(flash.conf_ptr->ll.page_descriptors != NULL);
             flash.total_flash_bytes += flash.conf_ptr->ll.page_descriptors[idx].size_bytes;
@@ -81,8 +78,7 @@ flash_status_t flash_init(flash_config_t* flash_config_ptr)
 	
         // Compute and store the base address of each copy of the app data
         // While at it read the meta data for any pages which are base of an app data copy
-        uint32_t page_dsc_idx = 0;
-        for(uint8_t copy_num = 0; copy_num < flash.conf_ptr->num_app_data_copies; ++copy_num)
+        for(uint32_t copy_num = 0, bytes_traversed = 0, page_dsc_idx = 0; copy_num < flash.conf_ptr->num_app_data_copies; ++copy_num)
         {
             if(copy_num == 0)
             {
@@ -114,7 +110,7 @@ flash_status_t flash_init(flash_config_t* flash_config_ptr)
         }
 
         // Search for the current valid copy of app data
-        for(idx = 0; idx < flash.conf_ptr->num_app_data_copies; ++idx)
+        for(uint8_t idx = 0; idx < flash.conf_ptr->num_app_data_copies; ++idx)
         {
             app_data_meta_t app_meta_data = {
                 .checksum = 0, 
@@ -156,7 +152,6 @@ flash_status_t flash_write(void)
 	{
         int32_t num_bytes_to_be_erased;
         uint32_t new_copy_base_page_idx;
-        uint32_t app_data_base_page_idx = flash.app_data_active_copy_base_page_idx;
         app_data_meta_t new_app_meta_data = {.checksum = 0, .length = 0, .validity = 0};
 
         // Compute base page idx of the next app_data copy region to be used
@@ -171,7 +166,7 @@ flash_status_t flash_write(void)
 
         // Erase pages spanned by next app_data copy region
         num_bytes_to_be_erased = flash.conf_ptr->data_descriptor.data_num_bytes;
-        for(uint8_t page_idx = new_copy_base_page_idx;; ++page_idx)
+        for(uint32_t page_idx = new_copy_base_page_idx;; ++page_idx)
         {
             ll_flash_page_erase(page_idx);
             num_bytes_to_be_erased -= flash.conf_ptr->ll.page_descriptors[page_idx].size_bytes;
