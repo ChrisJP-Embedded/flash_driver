@@ -1,6 +1,10 @@
+# Summary
+
 First pass implementation of a high-level flash driver for embedded systems.
 
-See main.c, flash_driver_lib/src, flash_driver_lib/inc.
+Implemented within Docker container / test environment, testing to be driven via python. 
+
+See main.c, flash_driver_lib/src.
 
 ## Project Directory Structure
 ```
@@ -14,7 +18,7 @@ See main.c, flash_driver_lib/src, flash_driver_lib/inc.
 |   |   `-- crc.h
 |   `-- src
 |       `-- crc.c
-|-- file_io_lib    <-- Used by ll_flash_stub to save and load data via file IO
+|-- file_io_lib         <-- Used by ll_flash_stub to save and load data via file IO
 |   |-- CMakeLists.txt
 |   |-- inc
 |   |   `-- data_persist.h
