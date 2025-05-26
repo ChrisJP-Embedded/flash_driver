@@ -2,6 +2,8 @@ First pass implementation of a high-level flash driver for embedded systems.
 
 See main.c, flash_driver_lib/src, flash_driver_lib/inc.
 
+## Project Directory Structure
+```
 .
 |-- CMakeLists.txt
 |-- Dockerfile
@@ -37,3 +39,4 @@ See main.c, flash_driver_lib/src, flash_driver_lib/inc.
 `-- python
     |-- Pipfile
     `-- flash_test.py   <-- Python test script for flash driver
+```
