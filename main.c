@@ -138,11 +138,12 @@ int main(int argc, char *argv[])
                         break;
 
                     case INIT_APP_DATA:
+                        printf("Init test data\n");
                         init_test_data();
                         break;
 
                     default:
-                        printf("assert");
+                        printf("unrecognised opcode");
                         break; 
                 }
 
