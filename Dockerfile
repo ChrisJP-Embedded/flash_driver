@@ -3,7 +3,7 @@ FROM buildpack-deps:bookworm
 RUN sed -i 's|http://deb.debian.org|https://deb.debian.org|g' \
         /etc/apt/sources.list /etc/apt/sources.list.d/*.list || true && \
     apt-get update -qq && \
-    apt-get install -y --no-install-recommends cmake gdb && \
+    apt-get install -y --no-install-recommends cmake gdb tree && \
     rm -rf /var/lib/apt/lists/*
 
 RUN apt-get update && \
