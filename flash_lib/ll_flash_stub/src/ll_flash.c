@@ -15,7 +15,7 @@ ll_flash_status_t ll_flash_init(ll_flash_config_t* _ll_flash_ptr)
     ll_flash_ptr = _ll_flash_ptr;
     if(load_state(mem, FLASH_SIZE) == false)
     {
-        printf("stub nv load failed, flash in earsed state\n");
+        printf("stub nv load failed, flash in erased state\n");
     }
     return ll_flash_status_ok;
 }

@@ -14,7 +14,7 @@ code in python/flash_test.py.
 The low-level flash driver (device-specific level) is a stub
 which saves and loads an array to file, providing faux flash.
 
-Python can analyse the faux flash file and could (not implemented)
+Python can analyze the faux flash file and could (not implemented)
 also update the app_data and size via file IO in the opcode dispatcher.
 */
 
@@ -26,13 +26,13 @@ static flash_status_t _flash_write(void);
 #define TEST_DATA_LEN NUM_KB_TO_NUM_BTYE(134)
 uint8_t test_data_a[TEST_DATA_LEN];
 
-// Flash app-level configuartion
+// Flash app-level configuration
 flash_config_t flash_config = 
 {
     // TODO: Update to include the following:
     // - max_app_data_size (sets aside extra data for expansion!)
     // - an array of data descriptors for app data?
-    // - add seperate data_ptr and meta_data_ptr
+    // - add separate data_ptr and meta_data_ptr
 	.num_app_data_copies = CFG_APP_DATA_NUM_COPIES,
 	.data_descriptor = {
 			.data_num_bytes = sizeof(test_data_a),
@@ -105,7 +105,7 @@ int main(int argc, char *argv[])
             tests_num_opcodes = atoi(argv[NUM_TEST_OPCODES]);
             tests_opcode_ptr = argv + TEST_OPCODE_0;
 
-            printf("num test opcodes: %d\n", tests_num_opcodes);
+            printf("\nNum test opcodes: %d\n", tests_num_opcodes);
 
             enum // scoped symbols
             {
@@ -143,7 +143,7 @@ int main(int argc, char *argv[])
                         break;
 
                     default:
-                        printf("unrecognised opcode");
+                        printf("Unrecognised opcode\n");
                         break; 
                 }
 
@@ -162,7 +162,7 @@ int main(int argc, char *argv[])
 
 /*
     Encapsulate flash initialization
-    and handling of return values
+    status console output
 */
 static flash_status_t _flash_init(void)
 {
@@ -196,6 +196,10 @@ static flash_status_t _flash_init(void)
     return status;
 }
 
+/*
+    Encapsulate flash write
+    status console output
+*/
 static flash_status_t _flash_write(void)
 {
     flash_status_t status = flash_write();

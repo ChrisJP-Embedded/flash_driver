@@ -8,7 +8,7 @@ Upper-level flash module, manages app_data layout within flash.
 A configurable number of app_data copies, where each app_data copy spans a number of whole pages. 
 The active copy is determined by a validity pattern at at its base page addr.
 On write we write to the next app_data copy region in ascending sequence, provides
-wear-levelling mechanism and also allows abilty to roll-back app_data (not yet implemented)
+wear-levelling mechanism and also allows ability to roll-back app_data (not yet implemented)
 
 Each app_data copy is prepended with an app_mete_data_t,
 which contains: 4BYTE_VALIDATION, 4BYTE_APP_LEN, 4BYTE_CRC
@@ -24,7 +24,7 @@ Takes a flash_config_t pointer (grabs local ptr copy).
 Determines if requested layout is valid.
 Computes the base address of each app_data copy, stores in array
 Identifies active copy via 4BYTE validity pattern in app meta.
-Evalulates CRC32 of the currently active copy of flash.
+Evaluates CRC32 of the currently active copy of flash.
 TODO: Roll back through app data copies if corruption detected.
 
 flash_write:
