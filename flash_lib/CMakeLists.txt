@@ -3,10 +3,10 @@ add_library(flash_lib STATIC
     ll_flash_stub/src/ll_flash.c
 )
 
-# headers needed while *building* flash_lib
+# includes 
 target_include_directories(flash_lib
-    PUBLIC  inc                 # flash.h visible to users (main.c)
-    PUBLIC  ll_flash_stub/inc   # ll_flash.h only for internal use
+    PUBLIC  inc
+    PUBLIC  ll_flash_stub/inc
 )
 
 # flash_lib depends on crc_lib (and needs its headers)
