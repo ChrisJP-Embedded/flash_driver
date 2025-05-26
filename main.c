@@ -117,7 +117,7 @@ int main(int argc, char *argv[])
 
             // By using an array of opcodes we can sequence actions
             // which drive the flash api and manipulate app data
-            while (tests_num_opcodes > 0 || tests_opcode_ptr == NULL)
+            while ((tests_num_opcodes > 0) && (tests_opcode_ptr != NULL))
             {
                 switch(atoi(*tests_opcode_ptr++))
                 {
