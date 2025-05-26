@@ -14,7 +14,7 @@ See main.c, flash_driver_lib/src, flash_driver_lib/inc.
 |   |   `-- crc.h
 |   `-- src
 |       `-- crc.c
-|-- data_persist_lib    <-- Used by ll_flash_stub to save and load data via file IO
+|-- file_io_lib    <-- Used by ll_flash_stub to save and load data via file IO
 |   |-- CMakeLists.txt
 |   |-- inc
 |   |   `-- data_persist.h

@@ -7,7 +7,7 @@ include_directories(${CMAKE_SOURCE_DIR})
 # sub‑libraries
 add_subdirectory(crc_lib)
 add_subdirectory(flash_lib)
-add_subdirectory(data_persist_lib)
+add_subdirectory(file_io_lib)
 
 # app
 add_executable(${PROJECT_NAME} main.c)

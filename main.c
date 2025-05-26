@@ -20,7 +20,7 @@ also update the app_data and size via file IO in the opcode dispatcher.
 
 // For testing only - saves/loads RAM
 // flash imitation array to/from file
-#include "data_persist.h"
+#include "file_io.h"
 
 static flash_status_t _flash_init(void);
 static flash_status_t _flash_write(void);
