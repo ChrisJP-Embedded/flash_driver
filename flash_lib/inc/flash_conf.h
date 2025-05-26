@@ -1,0 +1,19 @@
+#ifndef FLASH_CONF_H
+#define FLASH_CONF_H
+
+//default config
+
+#define CFG_NUM_PAGES 4
+#define CFG_NUM_FLASH_KEYS 2
+#define CFG_APP_DATA_NUM_COPIES 3
+
+#define CFG_HAS_PAGES
+#define CFG_HAS_KEYS
+#define CFG_HAS_SECTORS
+
+#define CFG_APP_DATA_PAGE_ZERO   0
+#define CFG_APP_DATA_VALID       0x55555555
+#define CFG_APP_DATA_INVALID     0x00000000
+#define CFG_APP_DATA_VALID_CLEAR 0xFFFFFFFF
+
+#endif

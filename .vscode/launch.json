@@ -1,0 +1,25 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Debug c_project",
+      "type": "cppdbg",
+      "request": "launch",
+      "program": "${workspaceFolder}/build/c_project",
+      "cwd": "${workspaceFolder}",
+      "preLaunchTask": "build",
+      "args": ["0"],
+      "stopAtEntry": false,
+      "MIMode": "gdb",
+      "miDebuggerPath": "/usr/bin/gdb",
+      "externalConsole": false,
+      "setupCommands": [
+        {
+          "text": "-enable-pretty-printing",
+          "description": "Enable pretty-printing",
+          "ignoreFailures": true
+        }
+      ]
+    }
+  ]
+}

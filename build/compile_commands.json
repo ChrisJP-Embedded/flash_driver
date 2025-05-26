@@ -1,0 +1,27 @@
+[
+{
+  "directory": "/work/build",
+  "command": "/usr/bin/gcc  -I/work/flash_lib/inc -I/work/flash_lib/ll_flash_stub/inc -I/work/crc_lib/inc -I/work/data_persist_lib/inc -g -o CMakeFiles/c_project.dir/main.c.o -c /work/main.c",
+  "file": "/work/main.c"
+},
+{
+  "directory": "/work/build/crc_lib",
+  "command": "/usr/bin/gcc  -I/work/crc_lib/inc -g -o CMakeFiles/crc_lib.dir/src/crc.c.o -c /work/crc_lib/src/crc.c",
+  "file": "/work/crc_lib/src/crc.c"
+},
+{
+  "directory": "/work/build/flash_lib",
+  "command": "/usr/bin/gcc  -I/work/flash_lib/inc -I/work/flash_lib/ll_flash_stub/inc -I/work/crc_lib/inc -I/work/data_persist_lib/inc -g -o CMakeFiles/flash_lib.dir/src/flash.c.o -c /work/flash_lib/src/flash.c",
+  "file": "/work/flash_lib/src/flash.c"
+},
+{
+  "directory": "/work/build/flash_lib",
+  "command": "/usr/bin/gcc  -I/work/flash_lib/inc -I/work/flash_lib/ll_flash_stub/inc -I/work/crc_lib/inc -I/work/data_persist_lib/inc -g -o CMakeFiles/flash_lib.dir/ll_flash_stub/src/ll_flash.c.o -c /work/flash_lib/ll_flash_stub/src/ll_flash.c",
+  "file": "/work/flash_lib/ll_flash_stub/src/ll_flash.c"
+},
+{
+  "directory": "/work/build/data_persist_lib",
+  "command": "/usr/bin/gcc  -I/work/data_persist_lib/inc -g -o CMakeFiles/data_persist_lib.dir/src/data_persist.c.o -c /work/data_persist_lib/src/data_persist.c",
+  "file": "/work/data_persist_lib/src/data_persist.c"
+}
+]

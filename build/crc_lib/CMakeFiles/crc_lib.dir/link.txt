@@ -1,0 +1,2 @@
+/usr/bin/ar qc libcrc_lib.a CMakeFiles/crc_lib.dir/src/crc.c.o
+/usr/bin/ranlib libcrc_lib.a

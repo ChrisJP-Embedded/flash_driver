@@ -1,0 +1,1 @@
+/usr/bin/gcc -g CMakeFiles/c_project.dir/main.c.o -o c_project  flash_lib/libflash_lib.a crc_lib/libcrc_lib.a data_persist_lib/libdata_persist_lib.a 
