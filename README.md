@@ -18,18 +18,21 @@ See main.c, flash_driver_lib/src.
 |   |   `-- crc.h
 |   `-- src
 |       `-- crc.c
+|
 |-- file_io_lib         <-- Used by ll_flash_stub to save and load data via file IO
 |   |-- CMakeLists.txt
 |   |-- inc
 |   |   `-- data_persist.h
 |   `-- src
 |       `-- data_persist.c
-|-- flash_conf.h
+|
+|-- flash_conf.h        <-- Application flash driver configuration (copied from default in flash_lib)
 |-- flash_lib
 |   |-- CMakeLists.txt
 |   |-- inc
 |   |   |-- flash.h
-|   |   `-- flash_conf.h
+|   |   `-- _flash_conf.h
+|   |
 |   |-- ll_flash_stub   <-- Stub for register level flash driver
 |   |   |-- inc
 |   |   |   `-- ll_flash.h
