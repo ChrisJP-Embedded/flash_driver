@@ -10,4 +10,4 @@ target_include_directories(flash_lib
 )
 
 # flash_lib depends on crc_lib (and needs its headers)
-target_link_libraries(flash_lib PUBLIC crc_lib data_persist_lib)
+target_link_libraries(flash_lib PUBLIC crc_lib file_io_lib)

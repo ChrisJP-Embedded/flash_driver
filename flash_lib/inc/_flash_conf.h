@@ -1,9 +1,7 @@
 #ifndef FLASH_CONF_H
 #define FLASH_CONF_H
 
-#define NUM_KB_TO_NUM_BTYE(x) (x*1024)
-
-//default config
+//default config (overridden by copy in top level)
 
 #define CFG_NUM_PAGES 4
 #define CFG_NUM_FLASH_KEYS 2
@@ -35,5 +33,6 @@
 #define CFG_APP_DATA_VALID       0x55555555
 #define CFG_APP_DATA_INVALID     0x00000000
 #define CFG_APP_DATA_VALID_CLEAR 0xFFFFFFFF
+
 
 #endif
