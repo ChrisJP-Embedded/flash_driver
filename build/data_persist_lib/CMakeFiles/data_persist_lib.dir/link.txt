@@ -1,2 +1,0 @@
-/usr/bin/ar qc libdata_persist_lib.a CMakeFiles/data_persist_lib.dir/src/data_persist.c.o
-/usr/bin/ranlib libdata_persist_lib.a
