@@ -2,7 +2,7 @@
 
 First pass implementation of a high-level flash driver for embedded systems.
 
-Implemented within Docker container / test environment, testing to be driven via python. 
+Implemented within Docker container / test environment, testing to be driven via python, devloped in WSL.
 
 See main.c, flash_driver_lib/src.
 
