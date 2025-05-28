@@ -71,7 +71,8 @@ flash_status_t flash_init(flash_config_t* flash_config_ptr)
         }
 
         // Compute the total number of bytes required for ALL copies of the app data, check it can fit!
-		if((flash.conf_ptr->data_descriptor.data_num_bytes * flash.conf_ptr->num_app_data_copies) > flash.total_flash_bytes)
+        uint32_t total_bytes_per_app_data = flash.conf_ptr->data_descriptor.data_num_bytes + sizeof(app_data_meta_t);
+		if((total_bytes_per_app_data * flash.conf_ptr->num_app_data_copies) > flash.total_flash_bytes)
 		{
 			return flash_status_total_size_exceeded;
 		}
