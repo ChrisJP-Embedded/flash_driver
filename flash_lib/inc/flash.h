@@ -20,6 +20,7 @@ typedef enum
 	flash_status_total_size_exceeded,
 	flash_status_no_valid_data_found,
     flash_status_data_corruption_detected,
+    flash_status_crc_check_failure,
     flash_status_ll_init_fault,
     flash_status_ll_write_fault,
     flash_status_ll_read_fault,
