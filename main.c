@@ -155,6 +155,9 @@ int main(int argc, char *argv[])
     {
         // manual bits when main not being
         // driven by python test dispatcher
+        //init_test_data();
+        //flash_init(&flash_config);
+        //flash_write();
     }
 
     return 0;
@@ -172,19 +175,27 @@ static flash_status_t _flash_init(void)
     switch(status)
     {
         case flash_status_ok:
-            printf("flash good!\n");
+            printf("main: flash good!\n");
             break;
 
         case flash_status_total_size_exceeded:
-            printf("requested app data layout exceeds available flash\n");
+            printf("main: requested app data layout exceeds available flash\n");
             break;
 
         case flash_status_data_corruption_detected:
-            printf("data corruption detected\n");
+            printf("main: data corruption detected\n");
             break;
 
         case flash_status_no_valid_data_found:
-            printf("no valid data found\n");
+            printf("main: no valid data found\n");
+            break;
+
+        case flash_status_crc_check_failure:
+            printf("main: crc check failure - corrupted data");
+            break;
+
+        case flash_status_ll_init_fault:
+            printf("main: ll stub reported issue - OK if nv_data didn't exist on first run\n");
             break;
 
         default:
