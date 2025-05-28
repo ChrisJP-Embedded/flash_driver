@@ -15,8 +15,10 @@ bool load_state(uint8_t* state, uint32_t len);
 
 /* 
     Writes a number of bytes from program to file.
+    INPUT: Pointer to array to be saved
+    INPUT: Length of data to be saved
     RETURNS: True on success, else False
 */
-bool save_state(void);
+bool save_state(uint8_t *state, uint32_t num_bytes);
 
 #endif

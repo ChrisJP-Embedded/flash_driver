@@ -5,9 +5,6 @@
     flash persistence via file save / load.
 */
 
-static uint8_t *state_ptr;
-static uint32_t state_len;
-
 bool load_state(uint8_t *state, uint32_t num_bytes)
 {
     if (state == NULL || num_bytes == 0)
@@ -37,16 +34,12 @@ bool load_state(uint8_t *state, uint32_t num_bytes)
         return false;
     }
 
-    // Cache only
-    state_ptr = state;
-    state_len = num_bytes;
-
     return true;  // TODO: switch to a status enum
 }
 
-bool save_state(void)
+bool save_state(uint8_t *state, uint32_t num_bytes)
 {
-    if (state_ptr == NULL || state_len == 0)
+    if (state == NULL || num_bytes == 0)
     {
         printf("save_state: no cached data\n");
         return false;
@@ -61,7 +54,7 @@ bool save_state(void)
     }
 
     // Write state to disk
-    if (fwrite(state_ptr, 1, state_len, f) != (size_t)state_len)
+    if (fwrite(state, 1, num_bytes, f) != (size_t)num_bytes)
     {
         printf("save_state: fwrite failed\n");
         fclose(f);
