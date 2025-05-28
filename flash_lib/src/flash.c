@@ -188,7 +188,6 @@ flash_status_t flash_write(void)
 
         if(status == ll_flash_status_ok)
         {
-            status = flash_status_ll_write_fault;
             if(ll_flash_write(addr, (uint8_t*)&new_app_meta_data, sizeof(app_data_meta_t)) == ll_flash_status_ok)
             {
                 // Read back the meta data of newly written app_data and eval CRC32
@@ -198,13 +197,18 @@ flash_status_t flash_write(void)
                     ll_flash_write(flash.conf_ptr->ll.page_descriptors[flash.app_data_active_copy_base_page_idx].base_addr,
                                             (uint8_t*)&(uint32_t){CFG_APP_DATA_INVALID}, sizeof(uint32_t));
 
+
                     // Validate new app_data copy
                     ll_flash_write(flash.conf_ptr->ll.page_descriptors[new_copy_base_page_idx].base_addr,
                                             (uint8_t*)&(uint32_t){CFG_APP_DATA_VALID}, sizeof(uint32_t));
 
                     flash.app_data_active_copy_base_page_idx = new_copy_base_page_idx;
 
-                    status = ll_flash_status_ok;
+                    status = flash_status_ok;
+                }
+                else
+                {
+                    status = flash_status_crc_check_failure;
                 }
             }
         }
