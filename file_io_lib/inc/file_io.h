@@ -17,6 +17,6 @@ bool load_state(uint8_t* state, uint32_t len);
     Writes a number of bytes from program to file.
     RETURNS: True on success, else False
 */
-void save_state(void);
+bool save_state(void);
 
 #endif
