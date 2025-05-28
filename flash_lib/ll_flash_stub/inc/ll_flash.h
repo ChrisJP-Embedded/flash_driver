@@ -32,6 +32,7 @@ typedef struct
 typedef enum
 {
     ll_flash_status_ok,
+    ll_flash_status_fail,
 } ll_flash_status_t;
 
 ll_flash_status_t ll_flash_init(ll_flash_config_t* _ll_flash_ptr);
