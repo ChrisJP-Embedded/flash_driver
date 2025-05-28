@@ -53,7 +53,7 @@ bool save_state(uint8_t *state, uint32_t num_bytes)
         return false;
     }
 
-    // Write state to disk
+    // Write state to file
     if (fwrite(state, 1, num_bytes, f) != (size_t)num_bytes)
     {
         printf("save_state: fwrite failed\n");
