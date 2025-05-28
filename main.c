@@ -92,9 +92,9 @@ int main(int argc, char *argv[])
 
     enum // scoped symbols
     {
-        VALID_TEST_SEQUENCE = 3,
         NUM_TEST_OPCODES = 1,
         TEST_OPCODE_0 = 2,
+        VALID_TEST_SEQUENCE = 3,
     };
 
     if(argc >= VALID_TEST_SEQUENCE)
@@ -117,7 +117,7 @@ int main(int argc, char *argv[])
 
             // By using an array of opcodes we can sequence actions
             // which drive the flash api and manipulate app data
-            while ((tests_num_opcodes > 0) && (tests_opcode_ptr != NULL))
+            while ((tests_num_opcodes > 0) && (*tests_opcode_ptr != NULL))
             {
                 switch(atoi(*tests_opcode_ptr++))
                 {
