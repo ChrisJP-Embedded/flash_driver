@@ -23,7 +23,7 @@ static flash_status_t _flash_write(void);
 
 // For testing only - some super important
 // app data imitation for testing flash module
-#define TEST_DATA_LEN NUM_KB_TO_NUM_BTYE(134)
+#define TEST_DATA_LEN NUM_KB_TO_NUM_BYTE(134)
 uint8_t test_data_a[TEST_DATA_LEN];
 
 // Flash app-level configuration
