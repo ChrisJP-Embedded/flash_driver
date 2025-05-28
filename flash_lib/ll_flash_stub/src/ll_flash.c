@@ -3,7 +3,7 @@
 #include "ll_flash.h"
 #include "file_io.h"
 
-#define FLASH_SIZE 1024UL*128UL*4UL
+#define FLASH_SIZE 1024UL*128UL*4UL //4 PAGES OF 128K
 
 ll_flash_config_t* ll_flash_ptr = NULL;
 uint8_t mem[FLASH_SIZE];
@@ -15,9 +15,8 @@ ll_flash_status_t ll_flash_init(ll_flash_config_t* _ll_flash_ptr)
 
     if(!load_state(mem, FLASH_SIZE))
     {
-        // Set flash stub to erased state 
-        memset(mem, 0xFF, FLASH_SIZE);
-        printf("stub nv load failed, flash in erased state\n");
+        memset(mem, 0xFF, FLASH_SIZE); // Set flash stub to flash full erased state 
+        printf("ll_flash:ll_flash_init: stub nv load failed, flash in erased state\n");
         return ll_flash_status_fail;
     }
     return ll_flash_status_ok;
@@ -50,7 +49,7 @@ ll_flash_status_t ll_flash_write(uint32_t addr, uint8_t* data, uint32_t num_byte
     memcpy(mem + addr, data, num_bytes);
     if(!save_state(mem, FLASH_SIZE))
     {
-        printf("ll_flash_write: save state call failure");
+        printf("ll_flash:ll_flash_write: save state call failure");
         return ll_flash_status_fail;
     }
 
@@ -74,7 +73,7 @@ ll_flash_status_t ll_flash_page_erase(uint8_t page_idx)
 
     if(!save_state(mem, FLASH_SIZE))
     {
-        printf("ll_flash_write: save state call failure");
+        printf("ll_flash:ll_flash_page_erase: save state call failure");
         return ll_flash_status_fail;
     }
 
