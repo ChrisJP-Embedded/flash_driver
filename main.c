@@ -105,7 +105,7 @@ int main(int argc, char *argv[])
             tests_num_opcodes = atoi(argv[NUM_TEST_OPCODES]);
             tests_opcode_ptr = argv + TEST_OPCODE_0;
 
-            printf("\nNum test opcodes: %d\n", tests_num_opcodes);
+            printf("\nmain: num test opcodes: %d\n", tests_num_opcodes);
 
             enum // scoped symbols
             {
@@ -122,12 +122,12 @@ int main(int argc, char *argv[])
                 switch(atoi(*tests_opcode_ptr++))
                 {
                     case INIT:
-                        printf("Initialize flash\n");
+                        printf("main: attempting flash initialization\n");
                         _flash_init();
                         break;
 
                     case WRITE:
-                        printf("Flash write op\n");
+                        printf("main: attempting flash write op\n");
                         _flash_write();
                         break;
 
@@ -138,12 +138,12 @@ int main(int argc, char *argv[])
                         break;
 
                     case INIT_APP_DATA:
-                        printf("Init test data\n");
+                        printf("main: initializing test data\n");
                         init_test_data();
                         break;
 
                     default:
-                        printf("Unrecognised opcode\n");
+                        printf("main: unrecognised opcode\n");
                         break; 
                 }
 
@@ -199,7 +199,7 @@ static flash_status_t _flash_init(void)
             break;
 
         default:
-            printf("unexpected state!\n");
+            printf("main: unexpected state!\n");
             assert(0);
             break;
     }
@@ -218,11 +218,11 @@ static flash_status_t _flash_write(void)
     switch(status)
     {
         case flash_status_ok:
-            printf("write good!\n");
+            printf("main: write good!\n");
             break;
 
         default:
-            printf("write fail: %d\n", status);
+            printf("main: write fail: %d\n", status);
             break;
     }
 
