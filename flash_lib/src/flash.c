@@ -33,7 +33,8 @@
        Writes app_data immediately after meta data.
        Reads back and evaluates CRC32 of app_data.
        Invalidates the most recent app_data active copy (writes 0 to validity)
-       Validates the new app_data active copy (writes VALID PATTERN 0x55555555) */
+       Validates the new app_data active copy (writes VALID PATTERN 0x55555555) 
+*/
 
 // Privates
 static struct {
@@ -47,56 +48,51 @@ static struct {
 
 } flash;
 
-/********************************/
-/*          flash_init          */
-/********************************/
+
 flash_status_t flash_init(flash_config_t* flash_config_ptr)
 {
-    /*--------- Sanity checks on arguments ---------*/
+
     assert(flash_config_ptr != NULL);
     assert(flash_config_ptr->ll.page_descriptors != NULL);
     assert(flash_config_ptr->num_app_data_copies == CFG_APP_DATA_NUM_COPIES);
     assert(flash_config_ptr->data_descriptor.app_data != NULL);
     assert(flash_config_ptr->data_descriptor.data_num_bytes > 0);
-    assert(flash_config_ptr->ll.pages_total_num > 0);                       /* Added */
+    assert(flash_config_ptr->ll.pages_total_num > 0);                       
 
-    /* Each page must have a non‑zero size */
+    // Each page must have a non‑zero size 
     for (uint8_t i = 0; i < flash_config_ptr->ll.pages_total_num; ++i)
     {
-        assert(flash_config_ptr->ll.page_descriptors[i].size_bytes > 0);     /* Added */
+        assert(flash_config_ptr->ll.page_descriptors[i].size_bytes > 0);     
     }
 
-    /*------------------------------------------------*/
     if (!flash.initialized)
     {
         flash.conf_ptr = flash_config_ptr;
         flash.initialized = true;
 
-        /* Compute total flash we have available in bytes */
+        // Compute total flash we have available in bytes 
         flash.total_flash_bytes = 0;
         for (uint8_t idx = 0; idx < flash.conf_ptr->ll.pages_total_num; ++idx)
         {
             assert(flash.conf_ptr->ll.page_descriptors != NULL);
             flash.total_flash_bytes += flash.conf_ptr->ll.page_descriptors[idx].size_bytes;
         }
-        assert(flash.total_flash_bytes > 0);                                /* Added */
+        assert(flash.total_flash_bytes > 0);                                
 
-        /* Ensure requested copies fit in the physical flash */
+        // Ensure requested copies fit in the physical flash 
         uint32_t total_required = flash_app_data_bytes_inc_meta() * flash.conf_ptr->num_app_data_copies;
-        assert(total_required > 0);                                          /* Added */
+        assert(total_required > 0);                                          
 
         if (total_required > flash.total_flash_bytes)
         {
             return flash_status_total_size_exceeded;
         }
 
-        /* Compute and store the base address of each copy of the app data */
+        //Compute and store the base address of each copy of the app data
         for (uint32_t copy_num = 0, bytes_traversed = 0, page_dsc_idx = 0;
-             copy_num < CFG_APP_DATA_NUM_COPIES;
-             ++copy_num)
+             copy_num < CFG_APP_DATA_NUM_COPIES; ++copy_num)
         {
-            /* Safety: page index always within bounds */
-            assert(page_dsc_idx < flash.conf_ptr->ll.pages_total_num);       /* Added */
+            assert(page_dsc_idx < flash.conf_ptr->ll.pages_total_num);       
 
             if (copy_num == 0)
             {
@@ -115,9 +111,8 @@ flash_status_t flash_init(flash_config_t* flash_config_ptr)
                     if ((flash.conf_ptr->ll.page_descriptors[page_dsc_idx].size_bytes + bytes_traversed) >=
                         flash.conf_ptr->data_descriptor.data_num_bytes)
                     {
-                        /* Next page becomes the base for the next copy */
-                        ++page_dsc_idx;                                      /* Safe increment */
-                        assert(page_dsc_idx < flash.conf_ptr->ll.pages_total_num); /* Added */
+                    
+                        assert(page_dsc_idx < flash.conf_ptr->ll.pages_total_num); 
 
                         flash.data_copies_base_addrs[copy_num] =
                             flash.conf_ptr->ll.page_descriptors[page_dsc_idx].base_addr;
@@ -127,22 +122,20 @@ flash_status_t flash_init(flash_config_t* flash_config_ptr)
                     else
                     {
                         bytes_traversed += flash.conf_ptr->ll.page_descriptors[page_dsc_idx].size_bytes;
-                        ++page_dsc_idx;
                     }
                 }
-                while (page_dsc_idx < flash.conf_ptr->ll.pages_total_num);
+                while (++page_dsc_idx < flash.conf_ptr->ll.pages_total_num);
             }
         }
 
-        /* Initialise LL driver */
+        // Initialise LL driver 
         ll_flash_status_t ll_status = ll_flash_init(&flash.conf_ptr->ll);
-        assert(ll_status == ll_flash_status_ok);                             /* Added */
         if (ll_status != ll_flash_status_ok)
         {
             return flash_status_ll_init_fault;
         }
 
-        /* Search for the current valid copy of app data */
+        // Search for the current valid copy of app data 
         for (uint8_t idx = 0; idx < CFG_APP_DATA_NUM_COPIES; ++idx)
         {
             app_data_meta_t app_meta_data = {
@@ -163,7 +156,7 @@ flash_status_t flash_init(flash_config_t* flash_config_ptr)
                 }
                 else
                 {
-                    /* Where we might try to roll‑back app data */
+                    // Where we might try to roll‑back app data 
                     return flash_status_data_corruption_detected;
                 }
             }
@@ -171,30 +164,28 @@ flash_status_t flash_init(flash_config_t* flash_config_ptr)
     }
     else
     {
-        /* Initialisation should only happen once */
+        // Initialisation should only happen once 
         assert(0);
     }
 
     return flash_status_no_valid_data_found;
 }
 
-/********************************/
-/*          flash_write         */
-/********************************/
+
 flash_status_t flash_write(void)
 {
     flash_status_t status = flash_status_ok;
 
-    /*--------- Sanity checks before we touch flash ---------*/
-    assert(flash.initialized);                                               /* Added */
+    //--------- Sanity checks before we touch flash ---------
+    assert(flash.initialized);                                               
     assert(flash.conf_ptr != NULL);
     assert(flash.conf_ptr->data_descriptor.app_data != NULL);
     assert(flash.conf_ptr->data_descriptor.data_num_bytes > 0);
-    assert(flash.conf_ptr->num_app_data_copies == CFG_APP_DATA_NUM_COPIES);  /* Added */
+    assert(flash.conf_ptr->num_app_data_copies == CFG_APP_DATA_NUM_COPIES);  
 
     if (!flash.initialized)
     {
-        /* Should never get here due to assert above */
+        // Should never get here due to assert above 
         return flash_status_uninitialized;
     }
 
@@ -202,7 +193,7 @@ flash_status_t flash_write(void)
     uint32_t new_copy_base_page_idx;
     app_data_meta_t new_app_meta_data = { .crc32 = 0, .length = 0, .validity = 0 };
 
-    /* Compute base page idx of the next app_data copy region to be used */
+    // Compute base page idx of the next app_data copy region to be used 
     if ((flash.app_data_active_copy_base_page_idx + 1) < flash.conf_ptr->num_app_data_copies)
     {
         new_copy_base_page_idx = flash.app_data_active_copy_base_page_idx + 1;
@@ -212,10 +203,10 @@ flash_status_t flash_write(void)
         new_copy_base_page_idx = 0;
     }
 
-    /* Consistency between copy index and physical pages */
-    assert(new_copy_base_page_idx < flash.conf_ptr->num_app_data_copies);    /* Added */
+    // Consistency between copy index and physical pages 
+    assert(new_copy_base_page_idx < flash.conf_ptr->num_app_data_copies);    
 
-    /* Erase pages spanned by next app_data copy region */
+    // Erase pages spanned by next app_data copy region 
     num_bytes_to_be_erased = flash.conf_ptr->data_descriptor.data_num_bytes + sizeof(app_data_meta_t);
 
     for (uint32_t page_idx = new_copy_base_page_idx;
@@ -256,16 +247,16 @@ flash_status_t flash_write(void)
         ll_status = ll_flash_write(addr, (uint8_t*)&new_app_meta_data, sizeof(app_data_meta_t));
         if (ll_status == ll_flash_status_ok)
         {
-            /* Read back the meta data of newly written app_data and eval CRC32 */
+            // Read back the meta data of newly written app_data and eval CRC32 
             if (flash_load_app_data_and_check_crc(new_copy_base_page_idx, &new_app_meta_data))
             {
-                /* Invalidate previous app_data copy */
+                // Invalidate previous app_data copy 
                 ll_flash_write(
                     flash.conf_ptr->ll.page_descriptors[flash.app_data_active_copy_base_page_idx].base_addr,
                     (uint8_t*)&(uint32_t){CFG_APP_DATA_INVALID},
                     sizeof(uint32_t));
 
-                /* Validate new app_data copy */
+                // Validate new app_data copy 
                 ll_flash_write(
                     flash.conf_ptr->ll.page_descriptors[new_copy_base_page_idx].base_addr,
                     (uint8_t*)&(uint32_t){CFG_APP_DATA_VALID},
@@ -281,36 +272,33 @@ flash_status_t flash_write(void)
         }
         else
         {
-            status = flash_status_ll_write_fault;                            /* Added */
+            status = flash_status_ll_write_fault;                            
         }
     }
     else
     {
-        status = flash_status_ll_write_fault;                                /* Added */
+        status = flash_status_ll_write_fault;                                
     }
 
     return status;
 }
 
-/******************/
-/**** PRIVATES ****/
-/******************/
 
-/* Returns the TOTAL size of an app_data copy region including meta data */
+// Returns the TOTAL size of an app_data copy region including meta data 
 static uint32_t flash_app_data_bytes_inc_meta(void)
 {
-    assert(flash.conf_ptr != NULL);                                          /* Added */
+    assert(flash.conf_ptr != NULL);                                          
     uint32_t total_num_bytes = flash.conf_ptr->data_descriptor.data_num_bytes + sizeof(app_data_meta_t);
     return total_num_bytes;
 }
 
-/* Reads flash and populates app_meta_data passed via pointer */
+// Reads flash and populates app_meta_data passed via pointer 
 static bool flash_read_copy_meta_data(uint32_t copy_idx, app_data_meta_t* app_meta_data)
 {
     assert(app_meta_data != NULL);
     assert(copy_idx < flash.conf_ptr->num_app_data_copies);
 
-    /* Read out meta data from base of specified page */
+    // Read out meta data from base of specified page 
     if (ll_flash_read(flash.data_copies_base_addrs[copy_idx],
                       (uint8_t*)app_meta_data,
                       sizeof(app_data_meta_t)) != ll_flash_status_ok)
@@ -320,8 +308,8 @@ static bool flash_read_copy_meta_data(uint32_t copy_idx, app_data_meta_t* app_me
     return true;
 }
 
-/* Loads app_data_meta_t from flash, checks CRC32 consistency.
-   RETURNS: true on success, else fail. TODO: Add return status granularity */
+// Loads app_data_meta_t from flash, checks CRC32 consistency.
+// RETURNS: true on success, else fail. TODO: Add return status granularity 
 static bool flash_load_app_data_and_check_crc(uint32_t page_idx, app_data_meta_t* app_data_meta)
 {
     assert(app_data_meta != NULL);
@@ -343,11 +331,11 @@ static bool flash_load_app_data_and_check_crc(uint32_t page_idx, app_data_meta_t
         return false;
     }
 
-    /* Compute CRC32 for the app_data range */
+    // Compute CRC32 for the app_data range 
     uint32_t _crc32 = crc32(flash.conf_ptr->data_descriptor.app_data,
                             flash.conf_ptr->data_descriptor.data_num_bytes);
 
-    /* Compare crc computed from read app data against the meta copy */
+    // Compare crc computed from read app data against the meta copy 
     if (_crc32 == app_data_meta->crc32)
     {
         return true;

@@ -4,7 +4,8 @@
         "crc.h": "c",
         "stdint.h": "c",
         "ll_flash.h": "c",
-        "data_persist.h": "c"
+        "data_persist.h": "c",
+        "flash_conf.h": "c"
     },
     "cmake.generator": "Unix Makefiles",
     "cmake.buildDirectory": "${workspaceFolder}/build"
