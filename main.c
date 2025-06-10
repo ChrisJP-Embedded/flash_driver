@@ -18,7 +18,7 @@ Python can analyze the faux flash file and could (not implemented)
 also update the app_data and size via file IO in the opcode dispatcher.
 */
 
-static flash_status_t _flash_init(void);
+static flash_status_t _flash_init(flash_config_t*);
 static flash_status_t _flash_write(void);
 
 // For testing only - some super important
@@ -32,11 +32,13 @@ flash_config_t flash_config =
     // TODO: Update to include the following:
     // - max_app_data_size (sets aside extra data for expansion!)
     // - an array of data descriptors for app data?
-    // - add separate data_ptr and meta_data_ptr
+    // - add separate app_data_base_ptr and meta_app_data_base_ptr
 	.num_app_data_copies = CFG_APP_DATA_NUM_COPIES,
 	.data_descriptor = {
+            //TODO: Think about a nicer way to describe num bytes of
+            //actual app_data and the app_data_meta (which is prefixed)
 			.data_num_bytes = sizeof(test_data_a),
-			.data_ptr = (uint8_t*)&test_data_a,
+			.app_data = (uint8_t*)&test_data_a,
 	}, 
 
     // The ll (low-level) configuration.
@@ -123,7 +125,7 @@ int main(int argc, char *argv[])
                 {
                     case INIT:
                         printf("main: attempting flash initialization\n");
-                        _flash_init();
+                        _flash_init(&flash_config);
                         break;
 
                     case WRITE:
@@ -155,9 +157,9 @@ int main(int argc, char *argv[])
     {
         // manual bits when main not being
         // driven by python test dispatcher
-        //init_test_data();
-        //flash_init(&flash_config);
-        //flash_write();
+        init_test_data();
+        _flash_init(&flash_config);
+        _flash_write();
     }
 
     return 0;
@@ -167,39 +169,39 @@ int main(int argc, char *argv[])
     Encapsulate flash initialization
     status console output
 */
-static flash_status_t _flash_init(void)
+static flash_status_t _flash_init(flash_config_t* flash_config)
 {
     // Initialize flash driver with our apps configuration
-    flash_status_t status = flash_init(&flash_config);
+    flash_status_t status = flash_init(flash_config);
 
     switch(status)
     {
         case flash_status_ok:
-            printf("main: flash good!\n");
+            printf("main:init: flash good!\n");
             break;
 
         case flash_status_total_size_exceeded:
-            printf("main: requested app data layout exceeds available flash\n");
+            printf("main:init: requested app data layout exceeds available flash\n");
             break;
 
         case flash_status_data_corruption_detected:
-            printf("main: data corruption detected\n");
+            printf("main:init: data corruption detected\n");
             break;
 
         case flash_status_no_valid_data_found:
-            printf("main: no valid data found\n");
+            printf("main:init: no valid data found\n");
             break;
 
         case flash_status_crc_check_failure:
-            printf("main: crc check failure - corrupted data");
+            printf("main:init: crc check failure - corrupted data");
             break;
 
         case flash_status_ll_init_fault:
-            printf("main: ll stub reported issue - OK if nv_data didn't exist on first run\n");
+            printf("main:init: ll stub reported issue - OK if nv_data didn't exist on first run\n");
             break;
 
         default:
-            printf("main: unexpected state!\n");
+            printf("main:init: unexpected state!\n");
             assert(0);
             break;
     }
