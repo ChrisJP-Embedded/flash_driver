@@ -10,7 +10,7 @@ typedef struct
 {
     uint32_t validity;
     uint32_t length;
-    uint32_t checksum;
+    uint32_t crc32;
 } app_data_meta_t;
 
 typedef enum
@@ -24,13 +24,22 @@ typedef enum
     flash_status_ll_init_fault,
     flash_status_ll_write_fault,
     flash_status_ll_read_fault,
+    flash_status_ll_erase_fault,
 } flash_status_t;
 
-typedef struct 
+typedef union
+{
+    uint8_t  * byte_ptr; 
+    uint32_t * word_ptr;
+    uint16_t * half_word_ptr;
+} app_data_t;
+
+
+typedef struct __attribute__((packed)) 
 {
 	uint32_t data_num_bytes;
-	uint8_t * data_ptr;
-    app_data_meta_t app_meta_data;
+    app_data_meta_t _app_data_meta;
+    uint8_t* app_data;
 } flash_data_dsc_t;
 
 typedef struct
@@ -49,7 +58,9 @@ flash_status_t flash_init(flash_config_t* flash_config_ptr);
 flash_status_t flash_write(void);
 flash_status_t flash_read(void);
 
-static bool flash_load_app_data_check_crc(uint8_t page_idx, app_data_meta_t* meta_data);
-static bool flash_load_app_data_copy_meta_data(uint32_t copy_base_addr, app_data_meta_t* meta_data);
+static uint32_t flash_app_data_bytes_inc_meta(void);
+
+static bool flash_load_app_data_and_check_crc(uint32_t page_idx, app_data_meta_t * app_data_meta);
+static bool flash_read_copy_meta_data(uint32_t copy_idx, app_data_meta_t* app_meta_data);
 
 #endif
