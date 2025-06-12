@@ -5,6 +5,9 @@
 
 //default config
 
+#define CFG_NUM_SECTORS 2
+
+
 #define CFG_NUM_PAGES 4
 #define CFG_NUM_FLASH_KEYS 2
 #define CFG_APP_DATA_NUM_COPIES 3

@@ -11,6 +11,15 @@ typedef struct
     uint32_t size_bytes;
 } page_dsc_t;
 
+typedef struct
+{
+    // Assign to externs from
+    // linker script values
+    uint32_t base_addr;
+    uint32_t size_bytes;
+} sector_dsc_t;
+
+
 typedef enum
 {
     write_size_8bit,
@@ -27,6 +36,7 @@ typedef struct
     flash_write_size_t write_granularity;
     const uint32_t* flash_keys;
     const page_dsc_t* page_descriptors;
+    const sector_dsc_t* sector_descriptors;
 } ll_flash_config_t;
 
 typedef enum

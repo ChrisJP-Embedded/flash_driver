@@ -48,9 +48,17 @@ flash_config_t flash_config =
     .ll.num_flash_keys = CFG_NUM_FLASH_KEYS,
     .ll.flash_keys = (const uint32_t[CFG_NUM_FLASH_KEYS]){CFG_FLASH_KEY1, CFG_FLASH_KEY2},
 
-    // No sector support yet - but would likely just be
-    // similar to page descriptors (below) and used to perform
-    // erases spanning multiple pages. Not a must have, as is mass erase.
+    // Sectors in development
+    .ll.sector_descriptors = (const sector_dsc_t[CFG_NUM_SECTORS]){
+        {
+            .base_addr = 0,
+            .size_bytes = 0,
+        }, 
+        {
+            .base_addr = 0,
+            .size_bytes = 0,
+        },
+    },
 
     // By having an array of page descriptors we have all the 
     // page base addresses and respective sizes on hand at runtime.
